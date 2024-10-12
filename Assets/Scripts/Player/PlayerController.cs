@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
         // Menggerakkan player
+        
         rb.velocity = new Vector2(moveDirection.x * currentSpeed, moveDirection.y * currentSpeed);
     }
 }
