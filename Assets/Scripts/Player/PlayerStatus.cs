@@ -52,8 +52,8 @@ public class PlayerStatus : MonoBehaviour
     // Method untuk memperbarui slider dan teks kesehatan
     void UpdateHealthUI()
     {
-        healthSlider.maxValue = maxHealth;  // Set nilai maksimal slider
-        healthSlider.value = currentHealth; // Set nilai slider berdasarkan kesehatan saat ini
+        // healthSlider.maxValue = maxHealth;  // Set nilai maksimal slider
+        // healthSlider.value = currentHealth; // Set nilai slider berdasarkan kesehatan saat ini
 
         /*healthText.text = currentHealth.ToString() + "/" + maxHealth.ToString();*/ // Perbarui teks kesehatan
     }

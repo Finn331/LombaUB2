@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - changeScene
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - UI
   - Background
   - Player
-  - Interior
-  - 
+  - Building
+  - Ground
   - 
   - 
   - 
@@ -44,9 +45,9 @@ TagManager:
   - name: Player
     uniqueID: 820494283
     locked: 0
-  - name: Interior
+  - name: Ground
     uniqueID: 507946147
     locked: 0
-  - name: Background
+  - name: Building
     uniqueID: 2113039455
     locked: 0
