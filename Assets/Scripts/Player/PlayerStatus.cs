@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public class PlayerStatus : MonoBehaviour
 {
     [Header("Health Setting")]
-    [SerializeField] int maxHealth;  // Maksimal kesehatan
-    public int currentHealth;              // Kesehatan saat ini
-    [SerializeField] Slider healthSlider;  // Slider untuk menampilkan kesehatan
+    [SerializeField] int maxAnxiety;  // Maksimal kesehatan
+    public int currentAnxiety;              // Kesehatan saat ini
+    [SerializeField] Slider anxietySlider;  // Slider untuk menampilkan kesehatan
     /*[SerializeField] TextMeshProUGUI healthText;*/  // Text untuk menampilkan kesehatan
 
     // Start is called before the first frame update
     void Start()
     {
         // Inisialisasi currentHealth dengan maxHealth pada awal permainan
-        currentHealth = maxHealth;
+        currentAnxiety = maxAnxiety;
 
         // Inisialisasi Slider dan Text
         
@@ -25,35 +25,35 @@ public class PlayerStatus : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        UpdateHealthUI();
+        UpdateAnxietyUI();
     }
 
     // Method untuk menerima damage
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        currentAnxiety -= damage;
 
-        // Pastikan currentHealth tidak lebih kecil dari 0
-        if (currentHealth < 0)
+        // Pastikan currentAnxiety tidak lebih kecil dari 0
+        if (currentAnxiety < 0)
         {
-            currentHealth = 0;
+            currentAnxiety = 0;
         }
 
         // Update UI setelah menerima damage
-        UpdateHealthUI();
+        UpdateAnxietyUI();
 
         // Jika currentHealth <= 0, panggil fungsi Die
-        if (currentHealth <= 0)
+        if (currentAnxiety <= 0)
         {
             Die();
         }
     }
 
     // Method untuk memperbarui slider dan teks kesehatan
-    void UpdateHealthUI()
+    void UpdateAnxietyUI()
     {
-        // healthSlider.maxValue = maxHealth;  // Set nilai maksimal slider
-        // healthSlider.value = currentHealth; // Set nilai slider berdasarkan kesehatan saat ini
+        anxietySlider.maxValue = maxAnxiety;  // Set nilai maksimal slider
+        anxietySlider.value = currentAnxiety; // Set nilai slider berdasarkan kesehatan saat ini
 
         /*healthText.text = currentHealth.ToString() + "/" + maxHealth.ToString();*/ // Perbarui teks kesehatan
     }

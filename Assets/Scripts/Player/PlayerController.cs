@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveDirection;
-    private Animator anim;
+    public Animator anim;
+    public bool isAnim;
 
     private bool isSprinting = false;
 
@@ -26,9 +27,17 @@ public class PlayerController : MonoBehaviour
         ProcessInput();
 
         // Animasi
-        anim.SetFloat("Horizontal", moveDirection.x);
-        anim.SetFloat("Vertical", moveDirection.y);
-        anim.SetFloat("Speed", moveDirection.sqrMagnitude);
+        if (isAnim == true)
+        {
+            anim.SetFloat("Horizontal", moveDirection.x);
+            anim.SetFloat("Vertical", moveDirection.y);
+            anim.SetFloat("Speed", moveDirection.sqrMagnitude);
+        }
+        else
+        {
+            anim.Play("idle-front-1");
+        }
+        
     }
 
     private void FixedUpdate()
