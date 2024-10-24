@@ -5,38 +5,52 @@ using UnityEngine.UI;
 
 public class DialogNpcTrigger : MonoBehaviour
 {
+    public GameObject buttonF;
+    public QuestManager questManager;
     public string questDescription;
-    public Text dialogText;
+    // public Text dialogText;
     public GameObject dialogUI; 
     private bool isPlayerNearby = false;
+    public GameObject dialogNpc;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            dialogUI.SetActive(true); // Tampilkan dialog UI saat pemain mendekati NPC
-            dialogText.text = "Press 'F' to take the quest"; // Tampilkan instruksi
+            buttonF.SetActive(true);
+            dialogUI.SetActive(true);
+            // dialogText.text = "Press 'F' to take the quest"; // Tampilkan instruksi
             isPlayerNearby = true;
+            if (questManager.currentQuestState == QuestState.NotStarted)
+            {
+                Debug.Log("Press 'F' to talk to the NPC and start the quest.");
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            buttonF.SetActive(false);
             dialogUI.SetActive(false);
             isPlayerNearby = false;
         }
     }
     void Start()
     {
+        buttonF.SetActive(false);
         dialogUI.SetActive(false);
     }
 
     void Update()
     {
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.F))
+        if (isPlayerNearby && Input.GetKeyDown(KeyCode.F) && questManager.currentQuestState == QuestState.NotStarted)
         {
-            dialogText.text = "Quest accepted: " + questDescription;
+            // dialogText.text = "Quest accepted: " + questDescription;
+            questManager.TalkToNPC();
+
+            dialogNpc.SetActive(true);
+
             TakeQuest();
         }
     }

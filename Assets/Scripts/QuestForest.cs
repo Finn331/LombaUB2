@@ -7,7 +7,7 @@ public class QuestForest : MonoBehaviour
     public GameObject forest;
     public GameObject forestSekarat;
 
-    bool active = true;
+    bool active = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,12 +21,5 @@ public class QuestForest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("tes");
-            changeAcrive();
-            forest.SetActive(active);
-            forestSekarat.SetActive(!active);
-        }
     }
 }
