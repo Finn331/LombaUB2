@@ -14,16 +14,23 @@ public class GameplayManager : MonoBehaviour
     [Header("Script Reference")]
     public PlayerController playerController;
 
-    // Start is called before the first frame update
+    [Header("Map Setting")]
+    public GameObject firstObjective;
+    public GameObject secondObjective;
+    public GameObject finishFirstObjective;
+    public GameObject finishSecondObjective;
+
     void Start()
     {
         // Pastikan pause dan setting menu tidak aktif di awal
         pauseMenu.SetActive(false);
         settingMenu.SetActive(false);
         isPaused = false;
+
+        // Cek status objektif dari PlayerPrefs dan aktifkan status finish jika sudah selesai
+        ObjectiveChecker();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Input di cek di sini karena input masih bekerja meskipun Time.timeScale = 0
@@ -31,6 +38,45 @@ public class GameplayManager : MonoBehaviour
         {
             TogglePause();
         }
+    }
+
+    void ObjectiveChecker()
+    {
+        // Cek apakah objektif pertama telah selesai
+        if (PlayerPrefs.GetInt("FirstObjectiveComplete", 0) == 1)
+        {
+            firstObjective.SetActive(false); // Nonaktifkan objektif pertama
+            finishFirstObjective.SetActive(true); // Tampilkan tanda objektif pertama selesai
+        }
+        else
+        {
+            firstObjective.SetActive(true);
+            finishFirstObjective.SetActive(false);
+        }
+
+        // Cek apakah objektif kedua telah selesai
+        if (PlayerPrefs.GetInt("SecondObjectiveComplete", 0) == 1)
+        {
+            secondObjective.SetActive(false); // Nonaktifkan objektif kedua
+            finishSecondObjective.SetActive(true); // Tampilkan tanda objektif kedua selesai
+        }
+        else
+        {
+            secondObjective.SetActive(true);
+            finishSecondObjective.SetActive(false);
+        }
+    }
+
+    public void CompleteFirstObjective()
+    {
+        PlayerPrefs.SetInt("FirstObjectiveComplete", 1); // Tandai objektif pertama selesai
+        ObjectiveChecker(); // Update status objektif
+    }
+
+    public void CompleteSecondObjective()
+    {
+        PlayerPrefs.SetInt("SecondObjectiveComplete", 1); // Tandai objektif kedua selesai
+        ObjectiveChecker(); // Update status objektif
     }
 
     // Pause and Unpause toggle
@@ -46,37 +92,33 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    // Pause System
     public void PauseGame()
     {
-        // Aktifkan pauseMenu dan scale-in
         pauseMenu.SetActive(true);
         LeanTween.scale(pauseMenu, new Vector3(1, 1, 1), 0.5f).setEase(LeanTweenType.easeOutBack);
         isPaused = true;
-        playerController.isAnim = false;  // Nonaktifkan animasi player
-        playerController.moveSpeed = 0;  // Hentikan pergerakan player
-        playerController.sprintSpeed = 0;  // Nonaktifkan sprint player
-        playerController.anim.SetFloat("Horizontal", 0);  // Set animasi player ke idle
-        playerController.anim.SetFloat("Vertical", 0);  // Set animasi player ke idle
-        playerController.anim.SetFloat("Speed", 0);  // Set animasi player ke idle
+        playerController.isAnim = false;
+        playerController.moveSpeed = 0;
+        playerController.sprintSpeed = 0;
+        playerController.anim.SetFloat("Horizontal", 0);
+        playerController.anim.SetFloat("Vertical", 0);
+        playerController.anim.SetFloat("Speed", 0);
     }
 
     public void ResumeGame()
     {
-        // Scale-out pauseMenu dan reset Time.timeScale
         LeanTween.scale(pauseMenu, Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
         {
             pauseMenu.SetActive(false);
             isPaused = false;
-            playerController.isAnim = true;  // Aktifkan kembali animasi player
-            playerController.moveSpeed = 5;  // Set ulang kecepatan player
-            playerController.sprintSpeed = 8;  // Set ulang kecepatan sprint
+            playerController.isAnim = true;
+            playerController.moveSpeed = 5;
+            playerController.sprintSpeed = 8;
         });
     }
 
     public void Setting()
     {
-        // Scale-in settingMenu dan scale-out pauseMenu
         LeanTween.scale(settingMenu, new Vector3(1, 1, 1), 0.5f).setEase(LeanTweenType.easeOutBack);
         LeanTween.scale(pauseMenu, Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
         {
@@ -87,7 +129,6 @@ public class GameplayManager : MonoBehaviour
 
     public void SettingBack()
     {
-        // Scale-in pauseMenu dan scale-out settingMenu
         LeanTween.scale(settingMenu, Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
         {
             settingMenu.SetActive(false);
