@@ -20,6 +20,10 @@ public class GameplayManager : MonoBehaviour
     public GameObject finishFirstObjective;
     public GameObject finishSecondObjective;
 
+    [Header("Pause Cooldown")]
+    public float pauseCooldown = 0.5f;  // Cooldown untuk toggle pause
+    private float pauseCooldownTimer = 0f;
+
     void Start()
     {
         // Pastikan pause dan setting menu tidak aktif di awal
@@ -33,10 +37,17 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
-        // Input di cek di sini karena input masih bekerja meskipun Time.timeScale = 0
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Update timer cooldown pause
+        if (pauseCooldownTimer > 0)
+        {
+            pauseCooldownTimer -= Time.deltaTime;
+        }
+
+        // Cek input hanya jika cooldown sudah habis
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseCooldownTimer <= 0)
         {
             TogglePause();
+            pauseCooldownTimer = pauseCooldown;  // Reset cooldown setelah toggle
         }
     }
 
