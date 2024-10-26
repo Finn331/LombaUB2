@@ -24,13 +24,26 @@ public class GameplayManager : MonoBehaviour
     public float pauseCooldown = 0.5f;  // Cooldown untuk toggle pause
     private float pauseCooldownTimer = 0f;
 
+    [Header("Transition Setting")]
+    [SerializeField] GameObject panel1;
+
+    void Awake()
+    {
+        panel1.SetActive(true);
+    }
     void Start()
     {
+        // First Transition
+        FirstTransition();
+
+        // Lock Player
+        LockPlayer();
+
         // Pastikan pause dan setting menu tidak aktif di awal
         pauseMenu.SetActive(false);
         settingMenu.SetActive(false);
         isPaused = false;
-
+        
         // Cek status objektif dari PlayerPrefs dan aktifkan status finish jika sudah selesai
         ObjectiveChecker();
     }
@@ -51,6 +64,7 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    // Objective Checker
     void ObjectiveChecker()
     {
         // Cek apakah objektif pertama telah selesai
@@ -90,6 +104,7 @@ public class GameplayManager : MonoBehaviour
         ObjectiveChecker(); // Update status objektif
     }
 
+    // Pause Mechanism
     // Pause and Unpause toggle
     public void TogglePause()
     {
@@ -108,12 +123,7 @@ public class GameplayManager : MonoBehaviour
         pauseMenu.SetActive(true);
         LeanTween.scale(pauseMenu, new Vector3(1, 1, 1), 0.5f).setEase(LeanTweenType.easeOutBack);
         isPaused = true;
-        playerController.isAnim = false;
-        playerController.moveSpeed = 0;
-        playerController.sprintSpeed = 0;
-        playerController.anim.SetFloat("Horizontal", 0);
-        playerController.anim.SetFloat("Vertical", 0);
-        playerController.anim.SetFloat("Speed", 0);
+        LockPlayer();
     }
 
     public void ResumeGame()
@@ -122,9 +132,8 @@ public class GameplayManager : MonoBehaviour
         {
             pauseMenu.SetActive(false);
             isPaused = false;
-            playerController.isAnim = true;
-            playerController.moveSpeed = 5;
-            playerController.sprintSpeed = 8;
+            
+            UnlockPlayer();
         });
     }
 
@@ -151,5 +160,32 @@ public class GameplayManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    // Transition Mechanism
+    public void FirstTransition()
+    {
+        LeanTween.alpha(panel1.GetComponent<RectTransform>(), 0, 1f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
+        {
+            panel1.SetActive(false);
+            UnlockPlayer();
+        });
+    }
+
+    void LockPlayer()
+    {
+        playerController.isAnim = false;
+        playerController.moveSpeed = 0;
+        playerController.sprintSpeed = 0;
+        playerController.anim.SetFloat("Horizontal", 0);
+        playerController.anim.SetFloat("Vertical", 0);
+        playerController.anim.SetFloat("Speed", 0);
+    }
+
+    void UnlockPlayer()
+    {
+        playerController.isAnim = true;
+        playerController.moveSpeed = 5;
+        playerController.sprintSpeed = 8;
     }
 }
