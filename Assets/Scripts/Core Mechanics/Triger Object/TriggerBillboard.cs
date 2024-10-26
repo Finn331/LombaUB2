@@ -58,32 +58,40 @@ public class TriggerBillboard : MonoBehaviour
 
     void ShowMap()
     {
-        // Cek jika sedang animasi, tidak akan mengeksekusi lagi
+        // Cek jika sedang animasi atau sudah terbuka, tidak akan mengeksekusi lagi
         if (isAnimating || isOpen) return;
 
         isAnimating = true;
         isOpen = true;
 
         billboard.SetActive(true);
-        LeanTween.scale(billboard, new Vector3(1, 1, 1), 0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
-        {
-            isAnimating = false;  // Animasi selesai
-            RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
-            if (closeButtonRect != null)
+
+        // Set skala awal agar animasi scale berjalan dari skala awal ke skala target
+        billboard.transform.localScale = Vector3.zero;
+        LeanTween.scale(billboard, new Vector3(1.0265f, 1.0265f, 1.0265f), 0.5f)
+            .setEase(LeanTweenType.easeOutBack)
+            .setOnComplete(() =>
             {
-                LeanTween.move(closeButtonRect, new Vector2(76.583f, -59.797f), 0.5f).setEase(LeanTweenType.easeOutBack);
-            }
-        });
+                isAnimating = false;  // Animasi selesai
 
-        playerController.isAnim = false;  // Nonaktifkan animasi player
-        playerController.moveSpeed = 0;  // Hentikan pergerakan player
-        playerController.sprintSpeed = 0;  // Nonaktifkan sprint player
-        playerController.anim.SetFloat("Horizontal", 0);  // Set animasi player ke idle
-        playerController.anim.SetFloat("Vertical", 0);  // Set animasi player ke idle
-        playerController.anim.SetFloat("Speed", 0);  // Set animasi player ke idle
+                // Cek dan animasikan posisi tombol close
+                RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
+                if (closeButtonRect != null)
+                {
+                    closeButton.SetActive(true); // Aktifkan tombol close sebelum animasi
+                    LeanTween.move(closeButtonRect, new Vector2(76.583f, -59.797f), 0.5f).setEase(LeanTweenType.easeOutBack);
+                }
+            });
 
-        closeButton.SetActive(true);  // Aktifkan closeButton
+        // Nonaktifkan animasi dan pergerakan player selama map terbuka
+        playerController.isAnim = false;
+        playerController.moveSpeed = 0;
+        playerController.sprintSpeed = 0;
+        playerController.anim.SetFloat("Horizontal", 0);
+        playerController.anim.SetFloat("Vertical", 0);
+        playerController.anim.SetFloat("Speed", 0);
     }
+
 
     void HideMap()
     {
