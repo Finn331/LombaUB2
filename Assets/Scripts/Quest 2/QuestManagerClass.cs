@@ -80,6 +80,15 @@ public class QuestManagerClass : MonoBehaviour
         }
     }
 
+    public void TalkToTeacherAgain()
+    {
+        if (currentQuestStateClass == QuestStateClass.TalkedWithTerundung1)
+        {
+            Debug.Log("Player memberitahukan guru bahwa korban sudah baik-baik saja.");
+            currentQuestStateClass = QuestStateClass.TalkedWithTeacher1; // Update ke tahap akhir
+        }
+    }
+
     // Menyelesaikan quest
     public void CompleteQuest()
     {

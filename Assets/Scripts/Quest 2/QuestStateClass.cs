@@ -5,6 +5,8 @@ public enum QuestStateClass
     TalkedWithPerundung,
     TalkedWithTeacher,
     TalkedWithFriend,
+    Monolog,
     TalkedWithTerundung1,
+    TalkedWithTeacher1,
     Completed
 }
