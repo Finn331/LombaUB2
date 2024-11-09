@@ -9,10 +9,13 @@ public class TrackingQuestProgressClass : MonoBehaviour
     public GameObject progressUI;           // UI untuk menampilkan progress quest
     public TextMeshProUGUI progressText;    // Text UI untuk menampilkan deskripsi progress
     public float delayTime = 2f;            // Waktu delay untuk menyembunyikan UI saat quest selesai
+    public PlayerController playerController; // Referensi ke PlayerController
+    private Teleporter teleporter;          // Referensi ke Teleporter
 
     void Start()
     {
         // Inisialisasi jika diperlukan
+        teleporter = GetComponent<Teleporter>();
     }
 
     void Update()
@@ -68,5 +71,18 @@ public class TrackingQuestProgressClass : MonoBehaviour
     {
         yield return new WaitForSeconds(delayTime); // Tunggu beberapa detik
         progressUI.SetActive(false);                // Sembunyikan UI setelah delay
+        teleporter.Teleportation("City");          // Teleportasi ke scene selanjutnya
+        LockPlayer();                              // Kunci player selama transisi
+    }
+
+    void LockPlayer()
+    {
+        // Nonaktifkan animasi dan pergerakan player selama transisi
+        playerController.isAnim = false;
+        playerController.moveSpeed = 0;
+        playerController.sprintSpeed = 0;
+        playerController.anim.SetFloat("Horizontal", 0);
+        playerController.anim.SetFloat("Vertical", 0);
+        playerController.anim.SetFloat("Speed", 0);
     }
 }

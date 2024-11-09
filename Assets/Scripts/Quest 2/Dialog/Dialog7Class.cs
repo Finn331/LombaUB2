@@ -8,11 +8,12 @@ public class Dialog7Class : MonoBehaviour
     public GameObject dialogBox;
     private bool hasTriggered = false;
     public string dialog;
+
+
     void Start()
     {
         dialogBox.SetActive(false);
     }
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -20,7 +21,7 @@ public class Dialog7Class : MonoBehaviour
         {
             hasTriggered = true;
             questManager.currentQuestStateClass = QuestStateClass.Completed;
-            dialogBox.SetActive(true);
+            dialogBox.SetActive(true);            
         }
     }
 }
